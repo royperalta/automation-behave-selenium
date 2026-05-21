@@ -45,7 +45,7 @@ class LoginPage(BasePage):
         self.ingresar_credenciales(usuario, contrasena)
         self.click_login()
 
-    # ── Getters / Aserciones ──────────────────────────────────────────────
+    # ── Getters / Aserciones ───
 
     def obtener_mensaje_error(self) -> str:
         """Retorna el texto del mensaje de error visible."""
