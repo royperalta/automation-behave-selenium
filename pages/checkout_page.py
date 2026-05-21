@@ -20,11 +20,25 @@ class CheckoutPage(BasePage):
 
     # ── Acciones ──────────────────────────────────────────────────────────
 
-    def completar_datos_personales(self, nombre: str, apellido: str, codigo_postal: str):
-        """Rellena el formulario del paso 1 del checkout."""
-        self.fill(self.FIRST_NAME_INPUT,  nombre)
-        self.fill(self.LAST_NAME_INPUT,   apellido)
-        self.fill(self.POSTAL_CODE_INPUT, codigo_postal)
+    # pages/checkout_page.py
+
+def completar_datos_personales(self, nombre: str, apellido: str, codigo_postal: str):
+    """Rellena el formulario del paso 1 del checkout."""
+
+    # 1. Esperar que la URL cambie a checkout-step-one
+    self.wait_for_url_contains("checkout-step-one.html")
+
+    # 2. Esperar que el campo sea visible primero, luego clickeable
+    self.wait_for_visible(self.FIRST_NAME_INPUT)
+
+    # 3. Scroll al elemento antes de interactuar (necesario en headless)
+    elemento = self.driver.find_element(*self.FIRST_NAME_INPUT)
+    self.driver.execute_script("arguments[0].scrollIntoView(true);", elemento)
+
+    # 4. Rellenar los campos
+    self.fill(self.FIRST_NAME_INPUT,  nombre)
+    self.fill(self.LAST_NAME_INPUT,   apellido)
+    self.fill(self.POSTAL_CODE_INPUT, codigo_postal)
 
     def click_continue(self):
         self.click(self.BOTON_CONTINUE)
