@@ -27,9 +27,13 @@ class InventoryPage(BasePage):
     # ── Acciones ──────────────────────────────────────────────────────────
 
     def agregar_producto_al_carrito(self, nombre_producto: str):
-        """Hace click en 'Add to cart' del producto indicado."""
-        locator = self._locator_boton_agregar(nombre_producto)
-        self.click(locator)
+    """Hace click en 'Add to cart' y espera que el badge aparezca."""
+    locator = self._locator_boton_agregar(nombre_producto)
+    self.click(locator)
+    # Esperar que el badge aparezca en el DOM después del click
+    self.wait_for_element(self.CART_BADGE)
+
+
 
     def ir_al_carrito(self):
         """Hace click en el ícono del carrito."""
@@ -38,8 +42,10 @@ class InventoryPage(BasePage):
     # ── Getters ───────────────────────────────────────────────────────────
 
     def obtener_cantidad_carrito(self) -> str:
-        """Retorna el número del badge del carrito como string ('1', '2', etc.)."""
-        return self.get_text(self.CART_BADGE)
+    """Retorna el número del badge — espera que sea visible."""
+    # presence primero, luego visible (más robusto en headless)
+    self.wait_for_element(self.CART_BADGE)
+    return self.get_text(self.CART_BADGE)
 
     def obtener_titulo_app(self) -> str:
         """Retorna el texto del logo ('Swag Labs')."""
